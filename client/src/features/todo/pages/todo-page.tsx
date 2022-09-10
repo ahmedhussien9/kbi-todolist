@@ -1,5 +1,5 @@
 import TodoForm from "../components/todo";
 
-export const Todo = () => {
+export const TodoPage = () => {
   return <TodoForm />;
 };
