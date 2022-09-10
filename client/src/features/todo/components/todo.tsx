@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Input, Item } from "../../../components";
+import { Button, Input, Item, SectionHeader } from "../../../components";
 import {
   addTodoApi,
   editTodoApi,
@@ -7,13 +7,15 @@ import {
   removeTodoApi,
   TodoDTO,
 } from "../api/todo.api";
+
 import { TodoResponse } from "../types";
+import { ToastContainer, toast } from "react-toastify";
 
 import "./todo.scss";
 
 export interface TodoUiProps {}
 
-const TodoForm: React.FC<TodoUiProps> = () => {
+function TodoForm() {
   const inputRef = React.useRef<any>();
   const [data, setData] = React.useState<TodoDTO[]>([]);
   const [update, setUpdate] = React.useState<boolean>(false);
@@ -31,21 +33,19 @@ const TodoForm: React.FC<TodoUiProps> = () => {
     });
   }, []);
 
-  const findTodo = (id: string) => {
-    const todo = data.find((todo: TodoDTO) => todo.id === id);
+  const findTodo = (id: string): TodoDTO => {
+    const todo = data.find((todo: TodoDTO) => todo.id === id) as TodoDTO;
     return todo;
   };
 
   const addAndEditTodo = (): void => {
     const value = inputRef.current.value;
     if (value && !update) {
-      let body = { id: "", name: value, isDone: false };
+      let body = { id: "", name: value, isDone: false } as TodoDTO;
       addTodoApi(body).then((todo: TodoResponse) => {
-        setData((value) => [
-          ...value,
-          { id: todo.id, name: todo.name, isDone: todo.isDone },
-        ]);
+        addNewTodoToCurrentList(todo);
         resetInputHandler();
+        toast("Todo has been added successfully");
       });
     }
 
@@ -53,20 +53,15 @@ const TodoForm: React.FC<TodoUiProps> = () => {
       let todo = findTodo(updatedTodo?.id) as TodoDTO;
       todo.name = inputRef.current.value;
       editTodoApi(todo.id, todo).then((todo: TodoResponse) => {
-        const updateTodoList = data.map((t: TodoDTO) => {
-          if (t.id === todo.id) {
-            return { id: t.id, name: t.name, isDone: t.isDone } as TodoDTO;
-          }
-          return t;
-        });
-        setData(updateTodoList);
+        updateCurrentTodoList(todo);
         resetInputHandler();
+        toast("Todo has been updated successfully");
       });
     }
   };
 
-  const editTodoHandler = (id: string) => {
-    const todo = findTodo(id);
+  const editTodoHandler = (id: string): void => {
+    const todo = findTodo(id) as TodoDTO;
     if (id && todo) {
       setUpdate(true);
       setUpdatedTodo(todo);
@@ -74,12 +69,43 @@ const TodoForm: React.FC<TodoUiProps> = () => {
     }
   };
 
-  const deleteTodoHandler = (id: string) => {
+  const todoStatusHandler = (id: string, state: boolean): void => {
     let todo = findTodo(id) as TodoDTO;
-    removeTodoApi(todo.id).then((todo: TodoResponse) => {
-      const updateTodoList = data.filter((t: TodoDTO) => t.id !== todo.id);
-      setData(updateTodoList);
+    todo.isDone = state;
+    editTodoApi(todo.id, todo).then((todo: TodoResponse) => {
+      updateCurrentTodoList(todo);
+      toast("Todo has been updated successfully");
+    });
+  };
+
+  const updateCurrentTodoList = (todo: TodoDTO): void => {
+    const updateTodoList = data.map((t: TodoDTO) => {
+      if (t.id === todo.id) {
+        return { id: t.id, name: t.name, isDone: t.isDone } as TodoDTO;
+      }
+      return t;
+    });
+    setData(updateTodoList);
+  };
+
+  const addNewTodoToCurrentList = (todo: TodoDTO): void => {
+    setData((value) => [
+      ...value,
+      { id: todo.id, name: todo.name, isDone: todo.isDone },
+    ]);
+  };
+
+  const removeTodoFromCurrentList = (todo: TodoDTO): void => {
+    const updateTodoList = data.filter((t: TodoDTO) => t.id !== todo.id);
+    setData(updateTodoList);
+  };
+
+  const deleteTodoHandler = (id: string): void => {
+    let todo = findTodo(id) as TodoDTO;
+    removeTodoApi(todo.id).then((t: TodoResponse) => {
+      removeTodoFromCurrentList(todo as TodoDTO);
       resetInputHandler();
+      toast("Todo has been deleted successfully");
     });
   };
 
@@ -88,47 +114,71 @@ const TodoForm: React.FC<TodoUiProps> = () => {
     inputRef.current.value = "";
   };
 
-  const onChangeInputHandler = (value: any) => {};
-
   return (
-    <div className="todo-container">
-      <h1 className="title"> Todo List</h1>
-      <p className="subTitle">Manage your todo items</p>
-      <hr />
-      <header className="header">
-        <Input
-          inputRef={inputRef}
-          onChangeInput={onChangeInputHandler}
-          placeholder="Write a new Todo item"
-        />
+    <section className="todo-container">
+      <SectionHeader title="Todo List" description="Manage your todo items" />
+      <div className="todo-container__inputWrapper">
+        <Input inputRef={inputRef} placeholder="Write a new todo item" />
         <Button name={update ? "Save" : "Add"} onClick={addAndEditTodo} />
-      </header>
-      <div className="body">
+      </div>
+      <div className="todo-container__body">
         {data && data.length > 0 ? (
           data.map((item, index) => {
             return (
-              <Item
-                name={item?.name}
-                itemId={item.id}
-                index={index + 1}
-                key={index}
-                editItem={editTodoHandler}
-                deleteItem={deleteTodoHandler}
-              />
+              <>
+                <Item
+                  name={item?.name}
+                  itemId={item.id}
+                  index={index + 1}
+                  key={index}
+                  isDone={item.isDone}
+                  todoDone={todoStatusHandler}
+                  editItem={editTodoHandler}
+                  deleteItem={deleteTodoHandler}
+                />
+              </>
             );
           })
         ) : (
           <>
             {isLoaded && (
-              <div className="empty-message">
-                <h5>There is no todo items yet!</h5>
+              <div className="empty-todo">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={0.9}
+                  stroke="currentColor"
+                  className="empty-todo__icon"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"
+                  />
+                </svg>
+                <h5 className="empty-todo__text">
+                  There is no todo items yet!
+                </h5>
               </div>
             )}
           </>
         )}
       </div>
-    </div>
+      <ToastContainer
+        autoClose={3000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      {/* Same as */}
+      <ToastContainer />
+    </section>
   );
-};
+}
 
 export default TodoForm;

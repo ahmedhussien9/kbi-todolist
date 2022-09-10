@@ -2,10 +2,8 @@
   background: none repeat scroll 0 0 transparent;
   border: medium none;
   border-spacing: 0;
-  font-family: "PT Sans Narrow", sans-serif;
   font-size: 16px;
   font-weight: normal;
-  line-height: 1.42rem;
   list-style: none outside none;
   margin: 0;
   padding: 0;
@@ -21,22 +19,29 @@
     min-width: 80px;
     color: wheat;
     background: var(--primary);
+    transition: all 0.3s ease-in-out;
+    border: 1px solid var(--primary);
+    box-shadow: var(--element-shadow);
+
+    &:hover {
+      box-shadow: none;
+      color: var(--primary);
+      background: var(--light-orange);
+    }
   }
   &__icon {
     background: transparent;
     min-width: 40px;
     color: var(--primary);
-  }
-  .icon {
-    &--edit {
-      &:hover {
-        color: var(--secondary);
-      }
+    border: none;
+    box-shadow: none;
+    &:hover {
+      color: var(--secondary);
+      background: transparent;
     }
-    &--delete {
-      &:hover {
-        color: var(--secondary);
-      }
+
+    .delete {
+      color: red;
     }
   }
 }

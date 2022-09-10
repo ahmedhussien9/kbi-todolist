@@ -1,0 +1,23 @@
+.section-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &__title {
+        color: var(--primary);
+        font-size: 30px;
+        margin: 0em 0em;
+        display: flex;
+        align-items: center;
+        .icon {
+            color: #07bc0c;
+            height: 25px;
+        }
+    }
+    &__description {
+        color: var(--secondary);
+        font-size: 14px;
+        margin: 0em 0em 1em 0em;
+        font-weight: lighter;
+    }
+}

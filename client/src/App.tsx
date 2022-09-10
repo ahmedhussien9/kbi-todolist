@@ -1,7 +1,7 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.scss";
 import Todo from "./features/todo/components/todo";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
