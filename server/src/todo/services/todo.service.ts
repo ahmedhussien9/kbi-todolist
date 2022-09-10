@@ -5,7 +5,7 @@ import { Todo } from "../model/todo.model";
 
 @Injectable()
 export class TodosService {
-  constructor(@InjectModel("Todo") private readonly TodoModel: Model<Todo>) {}
+  constructor(@InjectModel("Todo") private readonly TodoModel: Model<Todo>) { }
 
   async insertTodo(name: string, isDone: boolean) {
     const newTodo = new this.TodoModel({
@@ -37,9 +37,7 @@ export class TodosService {
     if (name) {
       updatedTodo.name = name;
     }
-    if (isDone) {
-      updatedTodo.isDone = isDone;
-    }
+    updatedTodo.isDone = isDone;
     updatedTodo.save();
   }
 
