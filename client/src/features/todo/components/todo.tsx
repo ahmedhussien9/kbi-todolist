@@ -9,7 +9,6 @@ import {
 } from "../api/todo.api";
 
 import { TodoResponse } from "../types";
-import { ToastContainer, toast } from "react-toastify";
 
 import "./todo.scss";
 
@@ -45,7 +44,6 @@ function TodoForm() {
       addTodoApi(body).then((todo: TodoResponse) => {
         addNewTodoToCurrentList(todo);
         resetInputHandler();
-        toast("Todo has been added successfully");
       });
     }
 
@@ -55,7 +53,6 @@ function TodoForm() {
       editTodoApi(todo.id, todo).then((todo: TodoResponse) => {
         updateCurrentTodoList(todo);
         resetInputHandler();
-        toast("Todo has been updated successfully");
       });
     }
   };
@@ -74,7 +71,6 @@ function TodoForm() {
     todo.isDone = state;
     editTodoApi(todo.id, todo).then((todo: TodoResponse) => {
       updateCurrentTodoList(todo);
-      toast("Todo has been updated successfully");
     });
   };
 
@@ -105,7 +101,6 @@ function TodoForm() {
     removeTodoApi(todo.id).then((t: TodoResponse) => {
       removeTodoFromCurrentList(todo as TodoDTO);
       resetInputHandler();
-      toast("Todo has been deleted successfully");
     });
   };
 
@@ -165,18 +160,6 @@ function TodoForm() {
           </>
         )}
       </div>
-      <ToastContainer
-        autoClose={3000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-      {/* Same as */}
-      <ToastContainer />
     </section>
   );
 }
