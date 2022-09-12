@@ -2,11 +2,6 @@
 
 Todo list Application managing your todo items, and it has the below functionality. 
 
-## Screenshots 
-
-<img width="466" alt="لقطة الشاشة 2022-09-12 002522" src="https://user-images.githubusercontent.com/29964545/189553095-5808bcb5-d838-46e0-9d88-f4da956773f6.png">
-<img width="434" alt="لقطة الشاشة 2022-09-12 012354" src="https://user-images.githubusercontent.com/29964545/189553342-633049a6-6390-4484-a7c9-798bfcf3a5f3.png">
-
 
 
 ## Features
@@ -14,14 +9,21 @@ Todo list Application managing your todo items, and it has the below functionali
 - Add new todo item. ✨ 
 - Update specfic todo item. ✨ 
 - Remove single todo item.  ✨ 
-- Update status of specfic todo. ✨   
+- Update status of specfic todo. ✨
+
+
+## Screenshots 
+
+<img width="466" alt="لقطة الشاشة 2022-09-12 002522" src="https://user-images.githubusercontent.com/29964545/189553095-5808bcb5-d838-46e0-9d88-f4da956773f6.png">
+<img width="434" alt="لقطة الشاشة 2022-09-12 012354" src="https://user-images.githubusercontent.com/29964545/189553342-633049a6-6390-4484-a7c9-798bfcf3a5f3.png">
+
 
 ## Tech
 
 Todo list item uses the below techologies:
 - [ReactJS] - A JavaScript library for building user interfaces!
 - [NestJS] - A progressive Node.js framework for building efficient, reliable and scalable server-side applications.
-
+- [MongoDB] - Get your ideas to market faster with a developer data platform built on the leading modern database. Support transactional, search, analytics, and mobile use cases while using a common query interface and the data model developers love.
 
 
 ## Installation for client
@@ -92,5 +94,7 @@ MIT
 **Free Software, Hell Yeah!**
 
    [ReactJS]: <https://reactjs.org/>
-   [NestJS]: <https://nestjs.com/>
+   [NestJS]: <https://nestjs.com/>   
+   [MongoDB]: <https://www.mongodb.com/>
+
 
