@@ -28,7 +28,7 @@ Todo list item uses the below techologies:
 
 ## Installation for client
 
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
+Todo List App requires [Node.js](https://nodejs.org/) v10+ to run.
 
 Install the dependencies and devDependencies and start the server.
 
@@ -46,7 +46,7 @@ localhost:3000
 
 ## Installation for Server 
 
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
+Todo List App requires [Node.js](https://nodejs.org/) v10+ to run.
 
 Install the dependencies and devDependencies and start the server.
 
